@@ -6,7 +6,9 @@ scope: text.blade
 contexts:
   main:
     - match: ''
-      push: 'scope:text.html.basic'
+      push:
+        - meta_content_scope: text.html.laravel-blade
+        - include: 'scope:text.html.basic'
       with_prototype:
 
         - match: '{{--'
@@ -24,7 +26,7 @@ contexts:
             0: entity.name.tag.block.any.html
           push:
             - meta_scope: meta.embedded.line.php
-            - meta_content_scope: source.php
+            - meta_content_scope: source.php.embedded.line
             - match: '-?(\}?\}\})|(!!)\}'
               captures:
                 0: entity.name.tag.block.any.html
@@ -38,8 +40,8 @@ contexts:
             1: constant.other.inline-data.html
             2: constant.other.inline-data.html
           push:
-            - meta_scope: source.php
-            - meta_content_scope: source.php
+            - meta_scope: source.php.embedded.line
+            - meta_content_scope: source.php.embedded.line
             - match: '(?<=\))'
               pop: true
             - include: 'scope:source.php'
@@ -57,7 +59,7 @@ contexts:
             2: constant.other.inline-data.html
           push:
             - meta_scope: custom.compiler.blade.php
-            - meta_content_scope: source.php
+            - meta_content_scope: source.php.embedded.line
             - match: '(?<=\))'
               pop: true
             - include: 'scope:source.php'
@@ -83,7 +85,7 @@ contexts:
         - match: '<\?(?i:php|=)?(?![^?]*\?>)'
           scope: punctuation.section.embedded.begin.php
           push: 
-            - meta_content_scope: source.php
+            - meta_content_scope: source.php.embedded.line
             - meta_scope: meta.embedded.block.php
             - include: 'scope:source.php'
           with_prototype:
@@ -95,7 +97,7 @@ contexts:
         - match: '<\?(?i:php|=)?'
           scope: punctuation.section.embedded.begin.php
           push: 
-            - meta_content_scope: source.php
+            - meta_content_scope: source.php.embedded.line
             - meta_scope: meta.embedded.line.php
             - include: 'scope:source.php'
           with_prototype:
