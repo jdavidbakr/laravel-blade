@@ -6,27 +6,25 @@ scope: text.blade
 contexts:
   main:
     - match: ''
-      push:
-        - include: 'scope:text.html.basic'
-          pop: true
+      push: 'scope:text.html.basic'
       with_prototype:
 
         - match: '{{--'
-          captures:
-            0: punctuation.definition.comment.html
+          scope: punctuation.definition.comment.start.html
           push:
-            - meta_scope: comment.block.blade.html
-            - match: '--}}'
-              pop: true
-            - match: "--"
-              scope: invalid.illegal.bad-comments-or-CDATA.html
+            - meta_scope: comment.block.html
+          with_prototype:
+          - match: '--}}'
+            captures:
+              0: punctuation.definition.comment.end.html
+            pop: true
 
         - match: '\{(!!)|(\{\{\{?)-?'
           captures:
             0: entity.name.tag.block.any.html
           push:
-            - meta_scope: meta.embedded.line.blade.php
-            - meta_content_scope: source.blade.php
+            - meta_scope: meta.embedded.line.php
+            - meta_content_scope: source.php
             - match: '-?(\}?\}\})|(!!)\}'
               captures:
                 0: entity.name.tag.block.any.html
@@ -40,8 +38,8 @@ contexts:
             1: constant.other.inline-data.html
             2: constant.other.inline-data.html
           push:
-            - meta_scope: custom.compiler.blade.php
-            - meta_content_scope: source.blade.php
+            - meta_scope: source.php
+            - meta_content_scope: source.php
             - match: '(?<=\))'
               pop: true
             - include: 'scope:source.php'
@@ -59,7 +57,7 @@ contexts:
             2: constant.other.inline-data.html
           push:
             - meta_scope: custom.compiler.blade.php
-            - meta_content_scope: source.blade.php
+            - meta_content_scope: source.php
             - match: '(?<=\))'
               pop: true
             - include: 'scope:source.php'
@@ -74,8 +72,8 @@ contexts:
           captures:
             0: entity.name.tag.block.any.html
           push:
-            - meta_scope: 'scope:text.html.basic'
-            - meta_content_scope: 'scope:text.html.basic'
+            - meta_scope: scope:text.html.basic
+            - meta_content_scope: scope:text.html.basic
             - match: '-?\}?\}\}'
               captures:
                 0: entity.name.tag.block.any.html
@@ -85,8 +83,8 @@ contexts:
         - match: '<\?(?i:php|=)?(?![^?]*\?>)'
           scope: punctuation.section.embedded.begin.php
           push: 
-            - meta_content_scope: source.blade.php
-            - meta_scope: meta.embedded.block.blade.php
+            - meta_content_scope: source.php
+            - meta_scope: meta.embedded.block.php
             - include: 'scope:source.php'
           with_prototype:
           - match: (?=\?>)(\?>)
@@ -97,8 +95,8 @@ contexts:
         - match: '<\?(?i:php|=)?'
           scope: punctuation.section.embedded.begin.php
           push: 
-            - meta_content_scope: source.blade.php
-            - meta_scope: meta.embedded.line.blade.php
+            - meta_content_scope: source.php
+            - meta_scope: meta.embedded.line.php
             - include: 'scope:source.php'
           with_prototype:
           - match: (?=\?>)(\?>)
