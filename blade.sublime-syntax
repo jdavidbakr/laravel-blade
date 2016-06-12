@@ -40,7 +40,7 @@ contexts:
             1: constant.other.inline-data.html
             2: constant.other.inline-data.html
           push:
-            - meta_scope: source.php.embedded.line
+            - meta_scope: custom.compiler.blade.php
             - meta_content_scope: source.php.embedded.line
             - match: '(?<=\))'
               pop: true
