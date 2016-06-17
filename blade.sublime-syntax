@@ -6,13 +6,15 @@ scope: text.blade
 contexts:
   main:
     - match: ''
-      push: 'scope:text.html.basic'
+      push:
+        - meta_content_scope: text.html.laravel-blade
+        - include: 'scope:text.html.basic'
       with_prototype:
 
         - match: '{{--'
           scope: punctuation.definition.comment.begin.html
           push:
-            - meta_scope: comment.block.laravel-blade
+            - meta_scope: comment.block.html
           with_prototype:
           - match: '--}}'
             captures:
@@ -23,8 +25,8 @@ contexts:
           captures:
             0: entity.name.tag.block.any.html
           push:
-            - meta_scope: text.html.laravel-blade
-            - meta_content_scope: text.html.laravel-blade
+            - meta_scope: meta.embedded.line.php
+            - meta_content_scope: source.php.laravel-blade
             - match: '-?(\}?\}\})|(!!)\}'
               captures:
                 0: entity.name.tag.block.any.html
@@ -38,14 +40,13 @@ contexts:
             1: constant.other.inline-data.html
             2: constant.other.inline-data.html
           push:
-            - meta_scope: text.html.laravel-blade
-            - meta_content_scope: text.html.laravel-blade
+            - meta_scope: custom.compiler.blade.php
+            - meta_content_scope: source.php.laravel-blade
             - match: '(?<=\))'
               pop: true
             - include: 'scope:source.php'
 
         - match: '(\s{0}|^)(\@)\b(empty|endif|endforelse|endforeach|endfor|endwhile|else|endunless|show|stop|endblock|endpartial|continue|break|endsection|parent|overwrite|endcan|append|endpush)\b'
-          scope: text.html.laravel-blade
           captures:
             0: entity.name.tag.block.any.html
             1: constant.other.inline-data.html
@@ -57,14 +58,13 @@ contexts:
             0: constant.other.inline-data.html
             2: constant.other.inline-data.html
           push:
-            - meta_scope: text.html.laravel-blade
-            - meta_content_scope: text.html.laravel-blade
+            - meta_scope: custom.compiler.blade.php
+            - meta_content_scope: source.php.laravel-blade
             - match: '(?<=\))'
               pop: true
             - include: 'scope:source.php'
 
         - match: '(\s{0}|^)(\@)\b([a-zA-Z_]+)\b(\s?)\b'
-          scope: text.html.laravel-blade
           captures:
             0: constant.other.inline-data.html
             2: constant.other.inline-data.html
@@ -74,8 +74,8 @@ contexts:
           captures:
             0: entity.name.tag.block.any.html
           push:
-            - meta_scope: text.html.laravel-blade
-            - meta_content_scope: text.html.laravel-blade
+            - meta_scope: scope:text.html.basic
+            - meta_content_scope: scope:text.html.basic
             - match: '-?\}?\}\}'
               captures:
                 0: entity.name.tag.block.any.html
@@ -87,7 +87,7 @@ contexts:
             0: punctuation.section.embedded.begin.php
           push:
             - meta_content_scope: source.php
-            - meta_scope: meta.embedded.block.php
+            - meta_scope: meta.embedded.line.php
             - include: 'scope:source.php'
           with_prototype:
           - match: (?=\?>)(\?>)
